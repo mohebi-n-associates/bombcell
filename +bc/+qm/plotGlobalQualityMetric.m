@@ -1,4 +1,4 @@
-function plotGlobalQualityMetric(qMetric, param, unitType, uniqueTemplates, templateWaveforms)
+function plotGlobalQualityMetric(qMetric, param, unitType, uniqueTemplates, templateWaveforms, savePath)
 % JF,
 % ------
 % Inputs
@@ -20,7 +20,7 @@ if param.plotGlobal
 
     %% plot summary of waveforms classified as noise/mua/good
     % 1. single/multi/noise/axonal waveforms
-    figure('Color', 'w');
+    h=figure('Color', 'w');
 
     if param.splitGoodAndMua_NonSomatic == 0
         unitTypeString = {'Noise', 'Good', 'MUA', 'Non-somatic'};
@@ -41,10 +41,16 @@ if param.plotGlobal
             xlim([21, 82])
         end
     end
+    set(h,'color','w')
+    set(h,'Units','inches','color','w');
+    screenposition = get(h,'Position');
+    set(gcf,'PaperPosition',[0 0 screenposition(3:4)],'PaperSize',[screenposition(3:4)]);
+    print('-dpdf','-painters',[savePath filesep 'waveforms_', datestr(now, 'yyyy-mm-dd')])
+
 
     %% plot distributions of unit quality metric values for each quality metric
 
-    figure('Position', [100, 100, 1500, 900], 'Color', 'w');
+    h_figure=figure('Position', [100, 100, 1500, 900], 'Color', 'w');
    
 
         % check if quality ,metric non somatic + noise ratios are present 
@@ -150,6 +156,11 @@ if param.plotGlobal
                 currentSubplot = currentSubplot + 1;
             end
         end
+        set(h_figure,'color','w')
+        set(h_figure,'Units','inches','color','w');
+        screenposition = get(h_figure,'Position');
+        set(gcf,'PaperPosition',[0 0 screenposition(3:4)],'PaperSize',[screenposition(3:4)]);
+        print('-dpdf','-painters',[savePath filesep 'qm_dist_', datestr(now, 'yyyy-mm-dd')])
  
 
 
