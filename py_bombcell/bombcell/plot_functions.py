@@ -89,7 +89,10 @@ def upset_plots(quality_metrics, unit_type_string, param):
             upset = UpSet(from_indicators(noise_metrics, data=noise_data), min_degree=1)
             upset.plot()
             plt.suptitle(f"Units classified as noise (n = {n_noise}/{total_units})")
-            plt.show()
+            # Save as PDF if saveDir is provided, else show
+            if 'saveDir' in param and param['saveDir']:
+                plt.savefig(f"{param['saveDir']}/upsetplot_noise.pdf", bbox_inches='tight')
+                plt.close()
         elif n_noise > 0:
             print(f"Noise upset plot skipped: no metrics have failures")
     except (AttributeError, ValueError) as e:
@@ -106,7 +109,9 @@ def upset_plots(quality_metrics, unit_type_string, param):
             upset = UpSet(from_indicators(non_somatic_metrics, data=non_somatic_data), min_degree=1)
             upset.plot()
             plt.suptitle(f"Units classified as non-somatic (n = {n_non_somatic}/{total_units})")
-            plt.show()
+            if 'saveDir' in param and param['saveDir']:
+                plt.savefig(f"{param['saveDir']}/upsetplot_nonsomatic.pdf", bbox_inches='tight')
+                plt.close()
         elif n_non_somatic > 0:
             print(f"Non-somatic upset plot skipped: no metrics have failures")
     except (AttributeError, ValueError) as e:
@@ -127,7 +132,10 @@ def upset_plots(quality_metrics, unit_type_string, param):
             upset = UpSet(from_indicators(mua_display_names, data=mua_data), min_degree=1)
             upset.plot()
             plt.suptitle(f"Units classified as MUA (n = {n_mua}/{total_units})")
-            plt.show()
+            if 'saveDir' in param and param['saveDir']:
+                plt.savefig(f"{param['saveDir']}/upsetplot_mua.pdf", bbox_inches='tight')
+                plt.close()
+
         elif n_mua > 0:
             print(f"MUA upset plot skipped: no metrics have failures")
     except (AttributeError, ValueError) as e:
@@ -549,4 +557,6 @@ def plot_histograms(quality_metrics, param):
         axs[row_id, col_id].set_visible(False)
 
     plt.tight_layout()
-    plt.show()
+    if 'saveDir' in param and param['saveDir']:
+        plt.savefig(f"{param['saveDir']}/histograms.pdf", bbox_inches='tight')
+        plt.close()
